@@ -15,42 +15,40 @@ namespace GameProgramming_RockPaperScissors_LucasHardy
         static Random random = new Random();
         static bool win = false;
         static bool lose = false;
-        
+        static int numberOfWins = 0;
+        static int numberOfComputerWins = 0;
         
         static ConsoleKeyInfo Answer;
         static string playerChoice;
-        
+        static string computerChoice;
         
 
         static void Main(string[] args)
         {
             int randomChoice = random.Next(3);
 
-           
-            //int valueOfChoice = int.Parse(myChoice);
-            
-            ShowHUD();
-            Answer = Console.ReadKey(true);
 
-            // Answer.Key
-
-            if (ConsoleKey.D1 == Answer.Key)
+            computerChoice = gameOptions[randomChoice];
+            while (numberOfWins < 3 && numberOfComputerWins < 3)
             {
-                Console.WriteLine("You Chose Rock.");
-                playerChoice = "Rock";
-            }
-            else if (ConsoleKey.D2 == Answer.Key)
-            {
-                Console.WriteLine("You Chose Paper");
-                playerChoice = "Paper";
-            }
-            else if (ConsoleKey.D3 == Answer.Key)
-            {
-                Console.WriteLine("You Chose Scissors");
-                playerChoice = "Scissors";
+                win = false;
+                lose = false;
+                ShowHUD();
+                Answer = Console.ReadKey(true);
+                GameLogic();
+                CompareChoices();
+                Console.ReadKey(true);
+                Console.WriteLine($"You have {numberOfWins} wins!");
+                Console.WriteLine($"Computer has {numberOfComputerWins} wins!");
+                Console.ReadKey(true);
+                Console.Clear();
+                if (numberOfComputerWins == 3 && numberOfWins < numberOfComputerWins)
+                {
+                    Console.WriteLine("You Lose best 2 out of 3!");
+                }
             }
             
-
+            
         }
 
         static void ShowHUD()
@@ -62,7 +60,40 @@ namespace GameProgramming_RockPaperScissors_LucasHardy
 
         static void GameLogic()
         {
-            
+            bool validChoice = false;
+
+            while (!validChoice)
+            {
+                if (ConsoleKey.D1 == Answer.Key)
+                {
+                    Console.WriteLine("You Chose Rock.");
+                    playerChoice = gameOptions[0];
+                    validChoice = true;
+                }
+                else if (ConsoleKey.D2 == Answer.Key)
+                {
+                    Console.WriteLine("You Chose Paper");
+                    playerChoice = gameOptions[1];
+                    validChoice = true;
+
+                }
+                else if (ConsoleKey.D3 == Answer.Key)
+                {
+                    Console.WriteLine("You Chose Scissors");
+                    playerChoice = gameOptions[2];
+                    validChoice = true;
+
+                }
+                else
+                {
+                    Console.WriteLine("Invalid Choice");
+                    Answer = Console.ReadKey(true);
+                }
+
+            }
+
+
+
 
 
 
@@ -74,11 +105,13 @@ namespace GameProgramming_RockPaperScissors_LucasHardy
             if (win == true)
             {
                 Console.WriteLine("You Win");
+                numberOfWins = numberOfWins + 1;
             }
 
             else if (lose == true)
             {
                 Console.WriteLine("You Lose");
+                numberOfComputerWins = numberOfComputerWins + 1;
             }
 
            
@@ -86,14 +119,60 @@ namespace GameProgramming_RockPaperScissors_LucasHardy
 
         static void GameTie()
         {
+            if (computerChoice == playerChoice)
             Console.WriteLine("You Tied");
         }
 
+        static void CompareChoices()
+        {
+            if (computerChoice == playerChoice)
+            {
+                GameTie();
+
+            }
+
+            else if (computerChoice == "Rock" && playerChoice == "Paper")
+            {
+                Console.WriteLine("You beat Computers Rock with your Paper");
+                win = true;
+                GameEnd();
+            }
+            else if (computerChoice == "Rock" && playerChoice == "Scissors")
+            {
+                Console.WriteLine("Computers Rock beats your Scissors");
+                lose = true;
+                GameEnd();
+            }
+
+            else if (computerChoice == "Paper" && playerChoice == "Rock")
+            {
+                Console.WriteLine("Computers Paper beats your Rock");
+                lose = true;
+                GameEnd();
+            }
+
+            else if (computerChoice == "Paper" && playerChoice == "Scissors")
+            {
+                Console.WriteLine("You beat Computers Paper with your Scissors");
+                win = true;
+                GameEnd();
+            }
+
+            else if (computerChoice == "Scissors" && playerChoice == "Paper")
+            {
+                Console.WriteLine("Computers Scissors beats your paper");
+                lose = true;
+                GameEnd();
+            }
+            else if (computerChoice == "Scissors" && playerChoice == "Rock")
+            {
+                Console.WriteLine("You beat Computers Scissors with your Rock");
+                win = true;
+                GameEnd();
+            }
+
+        }
     }
 
-    //Players chooses
-    //Computer chooses
-    //Compares choices
-    //if player wins then win
-    //if player loses then lose
+   
 }
